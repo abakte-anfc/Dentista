@@ -1,4 +1,4 @@
 <!doctype html><html lang="pt-BR"><meta charset="utf-8"><title>Renderização do modelo</title>
 <style>html,body{margin:0;background:transparent}model-viewer{width:600px;height:600px;background:transparent;--poster-color:transparent}</style>
-<model-viewer src="../assets/3d/dente.glb" camera-orbit="0deg 75deg 105%" shadow-intensity="0.6" shadow-softness="1" exposure="1.05" environment-image="neutral" interaction-prompt="none"></model-viewer>
-<script type="module">import {ModelViewerElement} from '../assets/js/vendor/model-viewer.min.js';ModelViewerElement.meshoptDecoderLocation = new URL('../assets/js/vendor/meshopt_decoder.js',location.href).href;</script>
+<model-viewer src="../assets/3d/dente.glb" camera-orbit="0deg 75deg 145%" shadow-intensity="0.25" shadow-softness="1" exposure="1.1" environment-image="neutral" interaction-prompt="none"></model-viewer>
+<script type="module">import {ModelViewerElement} from '../assets/js/vendor/model-viewer.min.js';ModelViewerElement.meshoptDecoderLocation = new URL('../assets/js/vendor/meshopt_decoder.js',location.href).href;import {brightenTooth} from '../assets/js/tooth-material.js';const viewer=document.querySelector('model-viewer');viewer.addEventListener('load',()=>{brightenTooth(viewer);viewer.dataset.materialReady='true';});</script>

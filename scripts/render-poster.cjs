@@ -7,7 +7,7 @@ async function render() {
     const page = await browser.newPage({ viewport: { width: 600, height: 600 } });
     page.on('pageerror', error => console.error(error.message));
     await page.goto('http://127.0.0.1:4173/artifacts/render-model.html');
-    await page.waitForFunction(() => document.querySelector('model-viewer').loaded, { timeout: 60000 });
+    await page.waitForFunction(() => document.querySelector('model-viewer').dataset.materialReady === 'true', { timeout: 60000 });
     await page.waitForTimeout(1200);
     const data = await page.locator('model-viewer').evaluate(e => e.toDataURL('image/png'));
     const png = Buffer.from(data.split(',')[1], 'base64');

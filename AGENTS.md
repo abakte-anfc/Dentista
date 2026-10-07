@@ -4,7 +4,7 @@ Instruções para agentes de IA que trabalham neste projeto. Leia também o `DES
 
 ## 1. Contexto do projeto
 
-- **Cliente:** Beliza Odontologia, consultório da Dra. Marcella Beliza.
+- **Cliente:** Beliza Odontologia, consultório da Dra. Marcelle Beliza.
 - **Instagram:** @belizaodontologia
 - **Endereço:** Av. Getúlio Vargas, 330, Shopping das Fábricas, Sala 18.
 - **WhatsApp:** (75) 98122-0711 → link `https://wa.me/5575981220711`
@@ -35,10 +35,10 @@ Publicidade de saúde é regulada pelo CFO (Código de Ética Odontológica e no
 ## 4. Estrutura da página (ordem das seções)
 
 1. **Header fixo:** logo + botão "Agendar" (WhatsApp).
-2. **Hero:** título emocional, subtítulo, CTA principal e **dente 3D giratório** (ver seção 6.1; a foto da Dra. Marcella vai na seção "Sobre" ou como alternativa ao 3D se o cliente preferir).
+2. **Hero:** título emocional, subtítulo, CTA principal e **dente 3D giratório** (ver seção 6.1; a foto da Dra. Marcelle vai na seção "Sobre" ou como alternativa ao 3D se o cliente preferir).
 3. **Tratamentos:** cards para Implantes, Aparelho ortodôntico, Clareamento, Limpeza/Profilaxia, Odontopediatria, Estética do sorriso (facetas/lentes).
 4. **Por que a Beliza:** 3–4 diferenciais (acolhimento, tratamentos que cabem no bolso, atendimento com paciência e respeito, estrutura moderna).
-5. **Sobre a Dra. Marcella:** foto, mini bio, CRO, formação (conteúdo a ser fornecido).
+5. **Sobre a Dra. Marcelle:** foto, mini bio, CRO, formação (conteúdo a ser fornecido).
 6. **Antes e depois / resultados:** apenas com autorização. Caso contrário, omitir a seção.
 7. **Depoimentos:** reais e fornecidos pelo cliente. Sem depoimento inventado.
 8. **Como funciona:** 3 passos (chama no WhatsApp → agenda a avaliação → recebe o plano de tratamento).
@@ -118,6 +118,117 @@ Publicidade de saúde é regulada pelo CFO (Código de Ética Odontológica e no
 - [ ] `prefers-reduced-motion` respeitado
 - [ ] Fallback com poster testado (WebGL desligado)
 - [ ] Licença do modelo registrada
+
+## 6.2 Experiência "dente guiado pelo scroll" (SUBSTITUI o hero e a rotação automática da 6.1)
+
+**Esta seção tem prioridade sobre a seção 4 (layout em seções empilhadas), sobre a 6.1 (auto-rotate, hero com dente ao lado do texto) e sobre o item 12 da seção 4 (o botão flutuante continua).** A 6.1 continua valendo para otimização do `.glb`, poster, fallback e licença.
+
+### Conceito
+Um **dente gigante fixo na tela** (nunca sai do viewport) acompanha a rolagem. Ele **só gira enquanto o usuário rola** (para baixo ou para cima), percorre a tela **da direita para a esquerda em trajeto de S/zigue-zague** e as informações da clínica **entram e saem em cascata**, em cena por cena. A rolagem é sempre a nativa do navegador: **proibido sequestrar o scroll** (nada de `preventDefault` na roda/touch, nem scroll snap forçado).
+
+### Arquitetura
+- Um único `<model-viewer>` com `position: fixed`, tamanho gigante (desktop ≈ `min(85vh, 60vw)`; mobile ≈ `70vw`), `pointer-events: none`, sem `auto-rotate`, sem `camera-controls`, `z-index` abaixo do texto e acima do fundo.
+- Página alta e normal (cenas empilhadas em `<section>`s de ≈ 100–140 vh). O conteúdo continua sendo DOM real e legível, na ordem correta, mesmo sem JS.
+- **Progresso global** `p = scrollY / (scrollHeight - innerHeight)`, de 0 a 1, lido em `scroll` (passivo) e aplicado em um laço `requestAnimationFrame` com suavização (lerp ≈ 0.08–0.12). O laço **para quando o valor assenta** (dente parado = rotação parada) e é retomado no próximo scroll.
+- **Rotação:** `ângulo = p * N voltas` (começar com 2 voltas, ajustar). Aplicar via `cameraOrbit`/`orientation` do model-viewer, só se o valor mudou mais que ~0,1°. Subir o scroll gira ao contrário, parar o scroll para a rotação (a inércia do lerp dura poucos décimos de segundo).
+- **Trajetória em S:** interpolar suavemente (spline/Catmull-Rom ou cubic) entre waypoints em % do viewport (posição do **centro** do dente), aplicados por `transform: translate3d()` (nunca `left/top`). Waypoints de partida, para ajustar visualmente:
+
+  | p | x (%) | y (%) | cena |
+  |---|---|---|---|
+  | 0.00 | 72 | 50 | Hero (direita) |
+  | 0.18 | 58 | 30 | Tratamentos |
+  | 0.36 | 32 | 66 | Diferenciais |
+  | 0.54 | 56 | 36 | Sobre a Dra. |
+  | 0.72 | 34 | 62 | Como funciona |
+  | 0.88 | 24 | 36 | Localização |
+  | 1.00 | 26 | 50 | CTA final (esquerda) |
+
+  Pode ter leve variação de escala (±8%) e inclinação (±6°) para dar vida. **Regra dura:** o dente inteiro permanece dentro do viewport em qualquer largura (clamp com margem de 4%), inclusive com a barra do navegador mobile.
+- **Texto sempre no lado oposto ao dente** em cada cena (dente à direita → texto à esquerda e vice-versa). Em telas estreitas, o texto fica em cartões com fundo `--color-cream` ~92% por cima do dente, mantendo contraste AA.
+
+### Cenas (mapeamento das seções)
+1. **Hero:** título, subtítulo, CTA WhatsApp. Dente grande à direita.
+2. **Tratamentos:** implantes, ortodontia, clareamento, limpeza, odontopediatria, estética.
+3. **Diferenciais:** acolhimento, "cabe no bolso", paciência e respeito, estrutura.
+4. **Sobre a Dra. Marcelle** (CRO e bio como `[PREENCHER]` até ter dados).
+5. **Como funciona:** 3 passos até a avaliação.
+6. **Localização:** endereço, mapa (link/iframe leve), horário `[PREENCHER]`.
+7. **CTA final + rodapé compacto:** dente à esquerda, CTA à direita, dados legais. FAQ pode virar cena própria (entre 5 e 6) ou lista compacta; resultados e depoimentos seguem **ocultos** até haver conteúdo real.
+
+### Cascata de conteúdo
+- Cada cena tem itens com `data-reveal` e ordem (`--i`). O estado de cada item é **função do progresso local da cena** (via `IntersectionObserver` + classes, ou cálculo no mesmo laço), não animação de uma vez só.
+- **Entrada:** itens surgem um após o outro (stagger 90–120 ms), de baixo para cima (`translateY(28px)→0`, `opacity 0→1`, 500–600 ms, `cubic-bezier(.22,.8,.3,1)`).
+- **Saída:** ao passar da cena, os itens saem em cascata na mesma ordem (`translateY(-20px)`, `opacity→0`, 300–400 ms).
+- **Reversível:** rolar para cima refaz o caminho inverso.
+- Só animar `transform` e `opacity`; `will-change` apenas no dente e na cena ativa.
+
+### Navegação e CTA
+- Header fixo com links âncora para as cenas (rolagem suave nativa `scroll-behavior: smooth`, desligada em `prefers-reduced-motion`).
+- Botão flutuante de WhatsApp e CTA do hero permanecem como definido. O CTA nunca fica coberto pelo dente.
+- Indicador de progresso discreto (barra fina ou pontos laterais), opcional.
+
+### Fallbacks e acessibilidade
+- `prefers-reduced-motion: reduce`: **sem** rotação, trajetória ou cascata. Dente estático (poster) em posição fixa menor, cenas empilhadas normais, conteúdo todo visível.
+- Sem JS ou sem WebGL: poster estático e página legível.
+- O dente é decorativo (`aria-hidden` no contêiner, ou `alt` curto); nada essencial depende dele. Ordem de tabulação segue o DOM, foco visível, sem armadilhas de foco.
+- Testar zoom 200% e rotação do celular (paisagem): o dente continua dentro da tela.
+
+### Performance (crítico: dente gigante + scroll)
+- Meta: **60 fps** em celular Android intermediário e Lighthouse mobile ≥ 90. Ler o scroll sem forçar layout (nada de `getBoundingClientRect` por frame em dezenas de elementos; cachear medidas e recalcular só em `resize`).
+- Limitar a resolução de renderização em celulares (menor escala do canvas / DPR máx. 2) e pausar o laço com `document.hidden`.
+- Poster continua sendo o LCP; o 3D carrega depois, com troca sem salto.
+- **Plano B:** se o `<model-viewer>` não sustentar fluidez com o dente gigante em movimento, migrar o dente para **Three.js** (self-host, mesmo `.glb`, mesma lógica de progresso). Decidir só após medir; registrar o resultado no resumo final.
+
+### Checklist 6.2
+- [ ] Dente nunca sai do viewport (mobile, tablet, desktop, paisagem, zoom 200%)
+- [ ] Gira só durante o scroll, nos dois sentidos; para quando o scroll para
+- [ ] Trajetória direita → esquerda em S; texto sempre no lado oposto
+- [ ] Cascata de entrada/saída reversível, só com `transform`/`opacity`
+- [ ] Scroll nativo, sem sequestro; âncoras do header funcionam
+- [ ] `prefers-reduced-motion`, sem JS e sem WebGL testados
+- [ ] CTA WhatsApp nunca coberto; contraste AA nos cartões sobre o dente
+- [ ] 60 fps medido em celular intermediário e Lighthouse mobile ≥ 90
+
+## 6.3 REVISÃO da experiência do dente (PREVALECE sobre a 6.2 onde houver conflito)
+
+Feedback do cliente após a primeira versão: o trajeto em S ficou "desengonçado", as caixas de texto atrapalhavam a visão do dente e o movimento precisa ser **mais suave**. Mudanças obrigatórias:
+
+### 1. Trajetória LINEAR (acabou o S/zigue-zague)
+- O dente anda em **linha reta horizontal**, da direita para a esquerda, proporcional ao scroll: `x = 72 − 44·p` (em % do viewport, centro do dente), `y` **constante** (≈ 48%) no desktop. Sem curvas, sem subir e descer, sem variação de escala.
+- Rotação em torno do próprio eixo vertical, proporcional ao scroll: `ângulo = p × 1,5 volta` (ajustável). Só gira durante o scroll, nos dois sentidos.
+- Tamanho gigante, mas que permita texto ao lado: desktop `min(72vh, 42vw)`; o dente **sempre inteiro** na tela.
+
+### 2. Texto FLUTUANTE, sem caixas
+- **Proibido** cartões, caixas, fundos ou bordas atrás do texto. O texto flutua direto sobre o fundo da página.
+- Para legibilidade: tipografia grande e contrastada, sombra de texto suave (halo na cor do fundo, ex.: `0 0 24px`) e blocos curtos (título + 1–2 linhas, ou lista curta).
+- Lado do texto é função de onde o dente está (`x` do dente):
+  - `x > 58%` (dente à direita) → texto na **coluna esquerda** (≈ 6–36% da largura)
+  - `x < 42%` (dente à esquerda) → texto na **coluna direita** (≈ 64–94%)
+  - `42% ≤ x ≤ 58%` (dente no centro) → texto na **faixa inferior**, largura total, em linha (ex.: 3 passos lado a lado), com o dente um pouco mais alto (`y ≈ 40%`).
+- Cenas, na nova ordem: **1 Hero** (p 0) · **2 Tratamentos** (p ≈ .15) · **3 Diferenciais** (p ≈ .30) · **4 Como funciona** (p ≈ .50, dente central, 3 passos em linha embaixo) · **5 Sobre a Dra. Marcelle** (p ≈ .65) · **6 Localização** (p ≈ .82) · **7 CTA final + rodapé compacto** (p 1, dente à esquerda). Resultados/depoimentos seguem ocultos até haver conteúdo real. Ajustar os `p` de cada cena conforme a altura real das cenas.
+- A cascata continua (itens em sequência, entrada de baixo para cima, saída para cima, reversível), agora **sem caixas**: só `opacity` + `transform`.
+- **Mobile:** dente na metade superior da tela (≈ 62vw, centro em `y ≈ 30%`), andando levemente da direita para a esquerda (`x` de 60% a 40%); texto flutuante na metade inferior (terço final da tela), centralizado ou alinhado à esquerda. O dente nunca é coberto por texto.
+
+### 3. Movimento mais suave
+- Suavização **independente de FPS**: `atual += (alvo − atual) × (1 − exp(−dt × k))`, com `k ≈ 5–7` (mais baixo = mais suave). Usar o `dt` real do `requestAnimationFrame`, não um lerp fixo por frame.
+- Limitar a velocidade angular máxima (ex.: 360°/s) para que um "fling" no celular não gere giro frenético.
+- Só `transform: translate3d()` no dente (nunca `left/top`); rotação via `orientation`/`cameraOrbit` com atualização **uma vez por frame**, sem recriar atributos desnecessariamente.
+- Nada de `scroll-behavior` ou animações CSS concorrentes mexendo no dente. Uma única fonte de verdade (o laço rAF).
+- Se mesmo assim não ficar "manteiga" em celular intermediário, **migrar o dente para Three.js** (mesmo `.glb`, mesmo progresso, `rotation.y` e `position.x` direto no objeto, renderização sob demanda só enquanto há movimento). Decidir por medição e registrar no resumo final.
+
+### 4. Aparência do dente e fundo
+- No print atual o dente aparece **acinzentado e opaco**. Corrigir a iluminação: aumentar `exposure` (≈ 1.3–1.6), manter `environment-image="neutral"` ou usar um HDRI de estúdio leve, clarear o material base (branco-esmalte, sem cinza) e dar brilho suave. O dente deve parecer **branco brilhante**, não cinza.
+- O fundo atual (rosa claro liso com círculo claro) dá pouco contraste ao dente branco. **Recomendação:** fundo em **terracota/rosé escuro** (como nos posts da clínica), com o dente branco em destaque e texto claro por cima. Ver `DESIGN.md` seção 10.2. **A decisão final do fundo depende da imagem que o cliente enviará; se houver imagem de referência na pasta, avaliar e justificar a escolha.**
+- Remover o "círculo/blob" claro atrás do dente. Se houver forma de apoio, usar halo de luz suave (radial-gradient) bem discreto.
+
+### Checklist 6.3
+- [ ] Trajeto reto, `y` constante, sem S nem variação de escala
+- [ ] Nenhum texto dentro de caixa/cartão; legível sobre o fundo (AA)
+- [ ] Texto troca de lado conforme o `x` do dente; no centro vai para a faixa inferior
+- [ ] Dente nunca coberto por texto (principalmente no mobile)
+- [ ] Movimento independente de FPS, sem tranco ao parar/retomar o scroll
+- [ ] Dente branco/brilhante (não acinzentado) em todas as cenas
+- [ ] Medição de 60 fps registrada (ou migração para Three.js documentada)
 
 ## 7. SEO local
 

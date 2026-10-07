@@ -8,6 +8,9 @@ O metadado não comprova direitos comerciais. Nenhuma licença é presumida.
 A cópia assets/3d/dente.glb conserva a geometria e os materiais do modelo
 fornecido, com simplificação, texturas WebP de até 512 px e Meshopt.
 O poster assets/img/dente-poster.webp é uma renderização dessa cópia.
+Na revisão linear, o GLB foi mantido. O material é clareado em tempo de
+execução e o poster foi renderizado novamente com o mesmo ajuste de esmalte
+e exposição 1,45. Isso não altera a pendência de direitos comerciais.
 
 Antes da publicação: [PREENCHER] titular/autoria, licença ou comprovante de
 direitos de uso comercial e atribuição exigida, se houver.

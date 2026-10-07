@@ -42,25 +42,17 @@ npm.cmd run assets:prepare
 
 `assets:prepare` também copia os arquivos vendor e as fontes; a primeira execução prepara a renderização e a última atualiza a imagem de compartilhamento. Os ativos já entregues evitam essa etapa inicial.
 
-## Carregamento do 3D
+## Experiência guiada pelo scroll
 
-O poster aparece imediatamente, com dimensões reservadas e prioridade alta. Após o evento `load`, IntersectionObserver observa o hero. No desktop, o viewer é importado quando o hero está próximo. No celular, a primeira interação também é necessária: a inicialização de WebGL não compete com a primeira exibição nem bloqueia o CTA. Com movimento reduzido, o poster permanece estático. Sem WebGL adequado ou em caso de erro, o poster permanece visível. Não há controles de arrasto que capturem a rolagem.
+Um único dente fixo percorre uma linha horizontal, com 1,5 volta ligada ao scroll nativo. O texto flutua sobre o gradiente terracota, sem caixas. No desktop, ocupa a coluna oposta ou a faixa inferior central; no mobile, fica abaixo do dente. O rAF usa tempo real, para ao assentar e pausa em document.hidden. O canvas tem DPR efetivo máximo 2. O GLB foi preservado; material e poster foram clareados.
 
-## Lighthouse mobile
+Sem JS/WebGL, com falha do modelo/módulo ou movimento reduzido, o poster fica estático e o conteúdo permanece visível. Esse modo usa a rolagem nativa da área de leitura para manter o texto separado do poster. Na experiência animada, a rolagem é a nativa da página, sem captura de wheel/touch.
 
-Medição local no Chrome, perfil mobile padrão do Lighthouse, em 07/10/2026:
-
-| Métrica | Resultado |
-|---|---:|
-| Performance | 99 |
-| Acessibilidade | 100 |
-| SEO | 100 |
-| LCP | 1,8 s |
-| CLS | 0 |
-| Total Blocking Time | 0 ms |
-
-Relatório HTML: artifacts/validation/lighthouse-mobile.report.html. A medição cobre o carregamento inicial com poster; o teste de interação confirma o 3D separadamente. As notas não garantem resultados iguais em hospedagem e aparelhos reais. Teste físico em Android de entrada ainda pendente. Configurar compressão HTTP e cache de assets na hospedagem.
+Validação, decisões, medições e limitações: [docs/SCROLL-LINEAR.md](docs/SCROLL-LINEAR.md). Reproduzir com o servidor ativo: `npm.cmd test` e `node tests/performance.cjs`. Relatório Lighthouse: `artifacts/validation/linear-lighthouse-final.report.html`.
 
 ## Publicação
 
-Consultar **PENDENCIAS.md** antes de divulgar. Faltam CRO, razão social/CNPJ, cidade, direitos de uso do modelo e outros conteúdos do cliente. Resultados e depoimentos foram omitidos por falta de autorização. Não inserir placeholders visíveis nem inventar dados. Atualizar URLs SEO absolutas quando o domínio for definido. Para hospedar, basta publicar index.html e assets/; scripts, node_modules, docs, tests, model e arquivos originais não precisam ser enviados.
+Consultar [PENDENCIAS.md](PENDENCIAS.md). Faltam dados profissionais e legais, cidade, domínio e comprovação dos direitos do modelo. Os campos ausentes usam `[PREENCHER]` durante a revisão; preencher antes de divulgar. Resultados e depoimentos continuam omitidos. Não há formulário, pixel, analytics ou scripts de terceiros. Para publicar, enviar `index.html` e `assets/`; configurar compressão e cache na hospedagem e URLs SEO absolutas quando o domínio for confirmado.
+# Direção visual atual
+
+A composição vigente segue DESIGN.md 10.3: foto da Dra. Marcelle no hero e dente 3D restrito aos benefícios. Validação em [docs/PORTRAIT-VALIDACAO.md](docs/PORTRAIT-VALIDACAO.md). Os relatórios da experiência de dente global descrevem versões anteriores.

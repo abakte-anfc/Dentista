@@ -3,7 +3,7 @@
 A implementação pode ser revisada localmente. Ainda não está liberada para divulgação: os dados legais e os direitos do modelo não foram fornecidos. Não há formulário, analytics, pixel ou cookies de rastreamento.
 
 ## Identificação e conteúdo
-- [ ] Nome completo da profissional: [PREENCHER]. Nome fornecido: Dra. Marcella Beliza.
+- [ ] Nome completo da profissional: [PREENCHER]. Nome fornecido: Dra. Marcelle Beliza.
 - [ ] CRO e UF: [PREENCHER]. Inserir junto à apresentação da Dra. e no rodapé.
 - [ ] Responsável técnica confirmada: [PREENCHER].
 - [ ] Razão social e CNPJ: [PREENCHER]. Inserir no rodapé.
@@ -26,10 +26,13 @@ A implementação pode ser revisada localmente. Ainda não está liberada para d
 - [ ] IDs Meta Pixel / GA4: [PREENCHER], apenas se houver solicitação de rastreamento. Nessa etapa implementar consentimento, política de privacidade e eventos de conversão.
 
 ## Validações disponíveis
-- Layout em 360, 768 e 1280 px, sem overflow horizontal.
-- CTAs com telefone e mensagem fornecidos; FAQ nativo e ausência de placeholders visíveis.
-- Poster com JavaScript desativado, WebGL indisponível, falha do modelo e falha da biblioteca.
-- Movimento reduzido conserva poster sem importar o viewer; mudança de preferência desativa rotação.
-- Dente decorativo não recebe foco (`inert`).
-- O 3D carrega automaticamente no desktop. No celular, IntersectionObserver e primeira interação liberam o carregamento, priorizando o poster e o CTA. Sem controles que capturem a rolagem.
-- Medições Lighthouse e limites de validação estão no README.md e em artifacts/validation/.
+
+Checklist vigente: [docs/SCROLL-LINEAR.md](docs/SCROLL-LINEAR.md).
+
+- Trajetória linear, texto sem caixas, material branco e cascata reversível.
+- Layouts em 360, 768 e 1280 px, paisagem e zoom 200%; sem overflow horizontal.
+- Links WhatsApp com telefone e mensagem corretos; FAQ nativo e foco acessível.
+- Cinco fallbacks e mudança de preferência para movimento reduzido.
+- Dente decorativo sem foco (`inert`); scripts e ativos locais.
+- Medições de Lighthouse e rAF em emulação registradas; Android físico ainda pendente.
+- CRO, biografia/formação, horário e dados legais usam `[PREENCHER]` na revisão, conforme instrução do usuário. Preencher antes de divulgar.

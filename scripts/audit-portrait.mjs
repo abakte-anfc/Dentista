@@ -1,0 +1,2 @@
+﻿import {chromium} from 'playwright';import lighthouse from 'lighthouse';import fs from 'node:fs';
+const browser=await chromium.launch({executablePath:'C:/Program Files/Google/Chrome/Application/chrome.exe',headless:true,args:['--remote-debugging-port=9223']});try{const r=await lighthouse('http://127.0.0.1:4173',{port:9223,output:'json',logLevel:'error'});fs.writeFileSync('artifacts/validation/portrait-lighthouse.json',JSON.stringify(r.lhr));console.log(Object.fromEntries(Object.entries(r.lhr.categories).map(([k,v])=>[k,v.score*100])))}finally{await browser.close()}

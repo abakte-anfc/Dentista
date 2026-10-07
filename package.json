@@ -4,7 +4,7 @@
   "description": "Landing page estática da Beliza Odontologia",
   "scripts": {
     "start": "node scripts/server.cjs",
-    "test": "node tests/browser.cjs",
+    "test": "node tests/motion.cjs && node tests/portrait.cjs",
     "assets:prepare": "node scripts/prepare-assets.cjs",
     "assets:poster": "node scripts/render-poster.cjs",
     "audit": "npm audit --omit=dev",
