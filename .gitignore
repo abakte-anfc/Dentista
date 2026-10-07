@@ -1,0 +1,7 @@
+node_modules/
+.npm-cache/
+.superpowers/
+artifacts/validation/*.html
+artifacts/validation/*.json
+artifacts/validation/*.png
+

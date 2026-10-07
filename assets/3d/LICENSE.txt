@@ -1,0 +1,16 @@
+MODELO FORNECIDO PELO USUÁRIO — LICENÇA COMERCIAL A CONFIRMAR
+
+Origem local: model/tooth 3d model.glb.
+Metadado do arquivo original: asset.generator = Tripo.
+Não foi fornecida documentação de autoria, licença ou termos do gerador.
+O metadado não comprova direitos comerciais. Nenhuma licença é presumida.
+
+A cópia assets/3d/dente.glb conserva a geometria e os materiais do modelo
+fornecido, com simplificação, texturas WebP de até 512 px e Meshopt.
+O poster assets/img/dente-poster.webp é uma renderização dessa cópia.
+
+Antes da publicação: [PREENCHER] titular/autoria, licença ou comprovante de
+direitos de uso comercial e atribuição exigida, se houver.
+
+Bibliotecas de exibição e compressão possuem licenças próprias em
+assets/js/vendor/. Essas licenças não cobrem o conteúdo do modelo.
