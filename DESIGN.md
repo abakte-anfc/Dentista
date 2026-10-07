@@ -1,5 +1,13 @@
 # DESIGN.md — Landing page Beliza Odontologia
 
+### Acabamento dos cards e carrossel — emil-design-eng
+
+Cards de tratamentos e contêiner do carrossel com fundo cream, borda terracota de baixa opacidade e sombra em três camadas, sem alterar fontes ou enquadramentos. Tokens: `--surface-border:1px solid rgb(185 107 102 / .18)`; `--surface-shadow:0 1px 2px rgb(59 42 41 / .025),0 4px 12px rgb(59 42 41 / .035),0 16px 32px -12px rgb(59 42 41 / .06)`. Cards com `--surface-card-padding` de 24 px no celular e 32 px a partir de 768 px; último parágrafo sem margem extra para manter bordas equilibradas. Carrossel mantém 16 px nas laterais e passa a 16 px entre a foto e os controles, preservando medidas de arrasto e alvos de toque.
+
+### Abertura e fechamento do FAQ — emil-design-eng
+
+Respostas com escala .96→1 e opacidade 0→1, origem top left junto ao acionador. Entrada 200 ms, saída 150 ms, curva `cubic-bezier(.23,1,.32,1)`. Web Animations API, sem dependências novas. Fechar mantém a resposta montada durante a saída; cliques rápidos revertem a partir do estado visual atual. Teclado e movimento reduzido têm resposta imediata; sem JS, details nativo. Tokens: `--faq-motion-enter`, `--faq-motion-exit`, `--faq-motion-scale`, `--faq-motion-ease`.
+
 ### Correção de qualidade das animações — 07/10/2026 (vigente)
 
 Esta revisão substitui os efeitos ScrollReveal por palavras descritos abaixo. Remover divisão do texto em spans, blur, escalas no texto e carregamento de GSAP para rolagem. Animar blocos editoriais inteiros apenas com opacity/translateY por IntersectionObserver nativo. Fontes, negritos, ícones e quebras permanecem no HTML original. Blocos visíveis ficam totalmente nítidos; entrada/saída ocorre ao cruzar os limites da viewport, reversível. Cards, listas e FAQ são unidades únicas, sem movimentos concorrentes entre pai e filhos. Agendamento, retrato e galeria mantêm suas interações e legibilidade. Fallback sem JS e movimento reduzido: tudo visível. Tokens: `--block-motion-duration:800ms`, `--block-entry-offset:16px`, `--block-exit-offset:-12px`.

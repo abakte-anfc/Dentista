@@ -64,8 +64,17 @@ figure{margin:0}.scene__window,.float-text{display:contents}.scene{scroll-margin
 @media(min-width:768px){.hero__copy{align-self:center;padding-bottom:var(--space-7)}.doctor-portrait{grid-template-columns:var(--portrait-columns-desktop);gap:var(--space-4)}}
 
 /* Fotos autorizadas: imagens completas, sem recorte de resultados. */
+/* Superfícies discretas — emil-design-eng, sem alterar tipografia ou fotos. */
+:root{--surface-border:1px solid rgb(185 107 102 / .18);--surface-shadow:0 1px 2px rgb(59 42 41 / .025),0 4px 12px rgb(59 42 41 / .035),0 16px 32px -12px rgb(59 42 41 / .06);--surface-card-padding:var(--space-5)}
+.treatment-card{padding:var(--surface-card-padding);background:var(--color-cream);border:var(--surface-border);border-radius:var(--radius-card);box-shadow:var(--surface-shadow)}
+.treatment-card p{margin-bottom:0}.treatment-card__top{margin-bottom:var(--space-5)}
+.results .carousel-container{border:var(--surface-border);box-shadow:var(--surface-shadow);background:var(--color-cream)}
+.results .carousel-controls{margin-top:var(--space-4)}
+@media(min-width:768px){:root{--surface-card-padding:var(--space-6)}}
 /* Entrada inicial sem ocultar textos ou agendamento. */
 /* Movimento de blocos sem dividir palavras nem alterar fontes. */
+:root{--faq-motion-enter:200ms;--faq-motion-exit:150ms;--faq-motion-scale:.96;--faq-motion-ease:cubic-bezier(.23,1,.32,1)}
+.faq details p{transform-origin:top left}
 :root{--block-motion-duration:800ms;--block-entry-offset:16px;--block-exit-offset:-12px}
 .motion-block{opacity:1;transform:none;transition:opacity var(--block-motion-duration) ease,transform var(--block-motion-duration) cubic-bezier(.22,.8,.3,1)}
 .motion-block.motion-before{opacity:0;transform:translateY(var(--block-entry-offset))}
