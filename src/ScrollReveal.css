@@ -1,0 +1,6 @@
+.scroll-reveal{display:block;margin:0;font:inherit;line-height:inherit}
+.scroll-reveal-text{font:inherit;line-height:inherit}
+.scroll-reveal-word{display:inline-block}
+.scroll-text:focus-within .scroll-reveal-word,.motion-focused{opacity:1!important;filter:none!important;transform:none!important}
+@media(prefers-reduced-motion:reduce){[data-motion-visual]{opacity:1!important;transform:none!important}}
+@media(prefers-reduced-motion:reduce){.scroll-reveal-word{opacity:1!important;filter:none!important}.scroll-reveal{transform:none!important}}

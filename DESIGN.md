@@ -1,5 +1,31 @@
 # DESIGN.md — Landing page Beliza Odontologia
 
+### Correção de qualidade das animações — 07/10/2026 (vigente)
+
+Esta revisão substitui os efeitos ScrollReveal por palavras descritos abaixo. Remover divisão do texto em spans, blur, escalas no texto e carregamento de GSAP para rolagem. Animar blocos editoriais inteiros apenas com opacity/translateY por IntersectionObserver nativo. Fontes, negritos, ícones e quebras permanecem no HTML original. Blocos visíveis ficam totalmente nítidos; entrada/saída ocorre ao cruzar os limites da viewport, reversível. Cards, listas e FAQ são unidades únicas, sem movimentos concorrentes entre pai e filhos. Agendamento, retrato e galeria mantêm suas interações e legibilidade. Fallback sem JS e movimento reduzido: tudo visível. Tokens: `--block-motion-duration:800ms`, `--block-entry-offset:16px`, `--block-exit-offset:-12px`.
+
+### Movimento ampliado — 07/10/2026
+
+Rodapé com entrada apenas, concluída até o fim da rolagem, sem ocultar texto na última posição da página. Navegação por teclado revela imediatamente a galeria focada e mantém seus controles utilizáveis. Rolagem permanece nativa, sem captura de wheel/touch.
+
+Por solicitação do cliente, ampliar ScrollReveal a títulos e textos informativos, incluindo descrições, legendas, listas, FAQ, endereço, horários e rodapé. Preservar o DOM original e seus links, ícones, negritos e navegação nativa. Palavras entram de baixo, tornam-se nítidas, permanecem legíveis e saem para cima ao passar do topo, com reversão ao subir. Blur 5 px nos títulos e 2 px no corpo. Ícones e galeria entram/saem com deslocamento discreto e escala .97→1. Hero recebe entrada inicial sem ocultar o texto; retrato entra horizontalmente, mantendo a base na transição de fundo. Botões e contatos clicáveis continuam visíveis. Sem JS, falha de módulo ou movimento reduzido: conteúdo estático visível. Tokens novos: `--entrance-duration:750ms`, `--entrance-offset:18px`, `--entrance-stagger:90ms`, `--portrait-entrance-offset:24px`.
+
+### ScrollReveal — 07/10/2026
+
+Aplicar ScrollReveal do React Bits aos títulos h2 das seções principais, com revelação reversível por palavras conforme o scroll nativo. Parâmetros: opacity inicial 0, blur 5 px e rotação 0. Tipografia, destaques em terracota e quebras de linha preservados. Títulos totalmente revelados ao atingir 55% da altura da tela. Hero e CTAs continuam imediatamente legíveis. A exceção de blur é específica deste componente solicitado pelo cliente. Movimento reduzido: texto estático e totalmente visível, incluindo troca da preferência em tempo real. Sem JS/falha de carregamento: manter o título original. H2 preservado, sem parágrafo dentro do título; nome acessível completo, animação visual decorativa. GSAP local e carregado apenas próximo aos títulos; React compartilhado com o carrossel.
+
+### Botões e funcionamento — 07/10/2026
+
+Textos e ícones dos botões verdes em `--color-white`, conforme solicitado pelo cliente. Para preservar contraste AA com branco, atualizar `--color-whatsapp` para `#12823C` e hover para `#106F33`. Esses valores prevalecem sobre os verdes anteriores. Horários na localização: segunda a sexta, 08:00–12:00 e 13:00–16:30; sábados, 08:00–12:00, conforme confirmação do cliente.
+
+### Retrato na transição do hero — 07/10/2026
+
+Alinhar a base do retrato à separação entre o hero blush e os tratamentos cream, sem padding inferior no hero nem cantos arredondados no retrato. Preservar a foto original; o corte inferior existente deve coincidir com a mudança de fundo. Nome e frase de apresentação na lateral esquerda da foto, inclusive no celular, sem sobreposição. Tokens: `--portrait-columns:1fr 1.8fr`, `--portrait-columns-desktop:.8fr 1.8fr`, `--portrait-ratio:4/5`. Imagem com altura proporcional, legenda em coluna independente; texto principal e CTA mantidos no fluxo.
+
+### Carrossel de registros autorizados — 07/10/2026
+
+Seção após Sobre/FAQ, com cinco fotos fornecidas em `provas/` e autorização de divulgação confirmada pelo cliente. Usar imagens inteiras, aviso de resultados variáveis e navegação manual. Componente React Bits fornecido pelo cliente, limitado à galeria. Fundo blush; contêiner cream; controles primary-dark. Novos tokens: `--results-width:520px`, `--results-image-ratio:4/5`. Sem autoplay, sem recorte circular e sem descrições clínicas não fornecidas. Em 768 px, texto e galeria em duas colunas; no celular, texto acima da galeria. Respeitar movimento reduzido e manter fallback sem JS.
+
 Guia de design da landing page. Baseado na identidade visual observada no Instagram @belizaodontologia. **Os valores de cor e fonte são aproximações visuais dos posts: confirme com o logo original e ajuste os tokens se necessário.**
 
 ## 1. Conceito
